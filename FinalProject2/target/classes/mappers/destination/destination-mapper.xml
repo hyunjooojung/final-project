@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="fp.busan.mvc.destination.mapper.DestinationMapper">
+
+	<resultMap type="Destination" id="DestinationResultMap">
+      <id property="de_id" column="DE_ID" />
+      <result property="name" column="NAME" />
+      <result property="gugunnm" column="GUGUNNM" /> 
+      <result property="lat" column="LAT" />
+      <result property="lng" column="LNG" />
+      <result property="place" column="PLACE" />
+      <result property="title" column="TITLE" />
+      <result property="subtitle" column="SUBTITLE" />
+      <result property="addr" column="ADDR" />
+      <result property="tel" column="TEL" />
+      <result property="homepage" column="HOMEPAGE" />
+      <result property="trfcinfo" column="TRFCINFO" />
+      <result property="usageday" column="USAGEDAY" /> 
+      <result property="hldyinfo" column="HLDYINFO" />
+      <result property="usage_day_week" column="USAGE_DAY_WEEK" />
+      <result property="amount" column="AMOUNT" />
+      <result property="middle_size_rm" column="MIDDLE_SIZE_RM" />
+      <result property="img" column="IMG" />
+      <result property="thumb" column="THUMB" />
+      <result property="detail" column="DETAIL" />
+      <result property="readCount" column="READCOUNT"/>
+   </resultMap>
+   
+	<!-- 전체 리스트 -->
+	<select id="selectDesAllList" resultMap="DestinationResultMap" >
+		SELECT * FROM Destination
+	</select>
+	
+	<!-- 명소 검색 -->
+	<select id="selectDesSearch" resultMap="DestinationResultMap" parameterType="map">
+		SELECT * from  Destination 
+		WHERE 1 = 1
+		<if test="name != null">
+		AND NAME LIKE '%'||#{name}||'%'
+		</if>
+		<if test="gugunnm != null">
+		AND GUGUNNM = #{gugunnm}
+		</if>
+		<if test="middle_size_rm != null">
+		AND MIDDLE_SIZE_RM is not null
+		</if>
+		<if test="homePage != null">
+		AND HOMEPAGE is not null
+		</if>
+		<if test="trfcInfo != null">
+		AND TRFCINFO is not null
+		</if>
+		<if test="sort != null">
+		ORDER BY READCOUNT ${sort}
+		</if>
+	</select>
+	
+	<!-- 검색 개수 -->
+	<select id="selectDesCount" resultType="int" parameterType="map">
+		SELECT count(*) from  Destination 
+		WHERE 1 = 1
+		<if test="name != null">
+		AND NAME LIKE '%'||#{name}||'%'
+		</if>
+		<if test="gugunnm != null">
+		AND GUGUNNM = #{gugunnm}
+		</if>
+		<if test="middle_size_rm != null">
+		AND MIDDLE_SIZE_RM is not null
+		</if>
+		<if test="homePage != null">
+		AND HOMEPAGE is not null
+		</if>
+		<if test="trfcInfo != null">
+		AND TRFCINFO is not null
+		</if>
+	</select>
+	
+	<!-- 검색페이지 추천 -->
+	<select id="reCommandDes" resultMap="DestinationResultMap">
+	SELECT * FROM
+	(select * from destination
+	order by dbms_random.value)
+	WHERE ROWNUM <![CDATA[<=]]>8
+	</select>
+	
+	<!-- 상세페이지 -->
+	<select id="selectById" resultMap="DestinationResultMap" parameterType="map">
+	SELECT * 
+	FROM destination
+	WHERE de_id = ${de_id}
+	</select>
+	
+	<update id="updateById" parameterType="map">
+	UPDATE destination 
+	SET readcount = readcount +1
+	WHERE de_id = ${de_id}
+	</update>
+	
+	<!-- 착한가격 근처 명소 -->
+	<select id="selectBygugun" resultMap="DestinationResultMap" parameterType="String">
+	SELECT * FROM destination
+	WHERE gugunnm = #{kind_add}
+	AND ROWNUM <![CDATA[<=]]>3
+	</select>
+	
+</mapper>
+       

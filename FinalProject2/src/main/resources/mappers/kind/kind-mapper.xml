@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="fp.busan.mvc.kind.mapper.KindMapper">
+
+	<!-- 맵핑 -->
+	<resultMap type="Kind" id="KindListResultMap">
+		<id property="kind_id" column="kind_id" />
+		<result property="kind_name" column="kind_name" />
+		<result property="ceoname" column="ceoname" />
+		<result property="adress" column="adress" />
+		<result property="tel" column="tel" />
+		<result property="cncode" column="cncode" />
+		<result property="cn" column="cn" />
+		<result property="localea" column="localea" />
+		<result property="localecode" column="localecode" />
+		<result property="kind_content" column="kind_content" />
+		<result property="parking" column="parking" />
+		<result property="bsntime" column="bsntime" />
+		<result property="img1" column="img1" />
+		<result property="img2" column="img2" />
+		<result property="cnt" column="cnt" />
+	</resultMap>
+
+	<!-- 검색 리스트 -->
+	<select id="selectKindSearch" resultMap="KindListResultMap"
+		parameterType="map">
+		SELECT * from Kind
+		WHERE 1 = 1
+		<if test="adressKeyword != null">
+			AND ADRESS LIKE '%'||#{adressKeyword}||'%'
+		</if>
+		<if test="parkingKeyword != null">
+			AND parking LIKE '%'||#{parkingKeyword}||'%'
+		</if>
+		<if test="titleKeyword != null">
+			AND cn LIKE '%'||#{titleKeyword}||'%'
+		</if>
+		<if test="searchKeyword != null">
+			AND kind_name LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="sortKeyword == null">
+			ORDER BY kind_id ASC
+		</if>
+		<if test="sortKeyword != null">
+			ORDER BY cnt ${sortKeyword}
+		</if>
+	</select>
+
+
+	<!-- 검색 개수 -->
+	<select id="selectKindCount" resultType="int"
+		parameterType="map">
+		SELECT COUNT(*) from Kind
+		WHERE 1 = 1
+		<if test="adressKeyword != null">
+			AND ADRESS LIKE '%'||#{adressKeyword}||'%'
+		</if>
+		<if test="parkingKeyword != null">
+			AND parking LIKE '%'||#{parkingKeyword}||'%'
+		</if>
+		<if test="titleKeyword != null">
+			AND cn LIKE '%'||#{titleKeyword}||'%'
+		</if>
+		<if test="contentKeyword != null">
+			AND kind_name LIKE '%'||#{contentKeyword}||'%'
+		</if>
+		<if test="sortKeyword == null">
+			ORDER BY kind_id ASC
+		</if>
+		<if test="sortKeyword != null">
+			ORDER BY cnt ${sortKeyword}
+		</if>	
+	</select>
+
+	<!-- 상세 페이지 -->
+	<select id="selectKindByNo" parameterType="int"
+		resultMap="KindListResultMap">
+		SELECT * FROM Kind WHERE kind_id =#{kind_id}
+	</select>
+
+	<!-- 조회수 업데이트 -->
+	<update id="updateReadCount" parameterType="map">
+		UPDATE Kind SET cnt = cnt + 1 WHERE KIND_ID = #{kind_id}
+	</update>
+
+	<select id="reCommend" resultMap="KindListResultMap">
+		SELECT *
+		FROM KIND
+		WHERE kind_id between 1 and 4
+	</select>
+
+</mapper>

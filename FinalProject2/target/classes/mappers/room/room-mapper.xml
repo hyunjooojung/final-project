@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Mapper 설정 파일임을 선언하는 부분 -->
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="fp.busan.mvc.room.mapper.RoomMapper">
+
+	<resultMap type="Room" id="roomResultMap">
+		<id property="code" column="CODE" />
+		<result property="name" column="NAME" />
+		<result property="adress" column="ADRESS" /> 
+		<result property="readcount" column="READCOUNT" />
+		<result property="localcode" column="LOCALCODE" />
+		<result property="tel" column="TEL" />
+		<result property="image" column="IMAGE" />
+		<result property="image2" column="IMAGE2" />
+		<result property="mapx" column="MAPX" />
+		<result property="mapy" column="MAPY" />
+		<result property="price" column="PRICE" />
+	</resultMap>
+	
+	<!-- 숙소 갯수 -->
+	<select id="getRoomCount" resultType="int" parameterType="map">
+		SELECT COUNT(*)
+		FROM ROOM
+		WHERE 1=1
+		<if test="searchKeyword != null">
+			AND NAME LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="placeKeyword != null">
+			AND ADRESS LIKE '%'||#{placeKeyword}||'%'
+		</if>
+	</select>
+	
+	
+	<!-- 숙소 조회 -->
+	<select id="getRoomList" parameterType="map" resultMap="roomResultMap">
+		SELECT * 
+		FROM ROOM
+		WHERE 1=1
+		<if test="searchKeyword != null">
+			AND NAME LIKE '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="placeKeyword != null">
+			AND ADRESS LIKE '%'||#{placeKeyword}||'%'
+		</if>
+		<if test="sortKeyword != null">
+		ORDER BY READCOUNT ${sortKeyword}
+		</if>
+		<if test="sortKeyword == null">
+		ORDER BY READCOUNT DESC
+		</if>
+	</select>
+	
+	<!-- 숙소 상세 -->
+	<select id="selectDetailByCode" parameterType="int" resultMap="roomResultMap">
+		SELECT CODE, NAME, ADRESS, READCOUNT, LOCALCODE, TEL, IMAGE, IMAGE2, MAPX, MAPY, PRICE
+		FROM ROOM
+		WHERE CODE = #{code}
+	</select>
+			
+	<!-- 숙소 예약 SEQ_ACReservation 시퀀스 만들기-->
+	<insert id="insertACReservation" parameterType="map">
+		INSERT INTO ACReservation(AR_CODE, USER_CODE, AC_CODE, AR_IN, AR_OUT, AR_RTIME, AR_PEOPLE)
+		VALUES (SEQ_ACReservation.NEXTVAL, ${user_code}, ${code}, #{in}, #{out}, SYSDATE, ${people})
+	</insert>
+	
+	<!-- 조회수 -->
+	<update id="updateReadCount" parameterType="int">
+		UPDATE ROOM
+			SET READCOUNT = READCOUNT + 1
+		WHERE
+			CODE = #{code} 
+	</update>
+	
+</mapper>
+
+       

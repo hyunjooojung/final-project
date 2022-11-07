@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="fp.busan.mvc.festival.mapper.FestivalMapper">
+
+	<resultMap type="Festival" id="FestivalListResultMap">
+		<id property="fe_id" column="FE_ID" />
+		<result property="fe_title" column="FE_TITLE" />
+		<result property="gugunnm" column="GUGUNNM" />
+		<result property="lat" column="LAT" />
+		<result property="lng" column="LNG" />
+		<result property="place" column="PLACE" />
+		<result property="title" column="TITLE" />
+		<result property="subtitle" column="SUBTITLE" />
+		<result property="main_place" column="MAIN_PLACE" />
+		<result property="addr1" column="ADDR1" />
+		<result property="addr2" column="ADDR2" />
+		<result property="tel" column="TEL" />
+		<result property="homepage" column="HOMEPAGE" />
+		<result property="trfcinfo" column="TRFCINFO" />
+		<result property="time" column="TIME" />
+		<result property="amount" column="AMOUNT" />
+		<result property="img" column="IMG" />
+		<result property="img_thumb" column="IMG_THUMB" />
+		<result property="detail" column="DETAIL" />
+		<result property="middle_size_rm1" column="MIDDLE_SIZE_RM1" />
+		<result property="readcount" column="READCOUNT" />
+		<result property="registration" column="REGISTRATION" />
+	</resultMap>
+
+	<select id="selectDongList" resultType="String" parameterType="map">
+		SELECT dong
+		FROM busangg
+		where gugunnm=#{gugunnm}
+	</select>
+
+	<select id="selectreCommendList" resultMap="FestivalListResultMap" >
+		SELECT * FROM
+		(SELECT * FROM festival
+		order by dbms_random.value)
+		WHERE
+		ROWNUM<![CDATA[<=]]>8
+	</select>
+
+	<select id="selectFestivalListCount" resultType="int" parameterType="map">
+		SELECT COUNT(*) FROM
+		festival f
+		WHERE 1 = 1
+		<if test="title != null">
+			AND f.title like '%'||#{title}||'%'
+		</if>
+		<if test="time != null">
+			AND f.time like '%'||#{time}||'%'
+		</if>
+		<if test="gugunnm != null">
+			AND f.gugunnm = #{gugunnm}
+		</if>
+		<if test="amount != null">
+			AND f.amount = #{amount}
+		</if>
+		<if test="middle_size_rm1 == 1">
+			AND f.middle_size_rm1 is not null 
+		</if>
+		<if test="middle_size_rm1 == 2">
+			AND f.middle_size_rm1 is null
+		</if> 
+	</select>
+
+	<select id="selectFestivalList" resultMap="FestivalListResultMap" parameterType="map">
+		SELECT * FROM
+		festival f
+		WHERE 1 = 1
+		<if test="title != null">
+			AND f.title like '%'||#{title}||'%'
+		</if>
+		<if test="time != null">
+			AND f.time like '%'||#{time}||'%'
+		</if>
+		<if test="gugunnm != null">
+			AND f.gugunnm = #{gugunnm} 
+		</if>									
+		<if test="amount != null">
+			AND f.amount = #{amount}
+		</if>
+		<if test="middle_size_rm1 == 1">
+			AND f.middle_size_rm1 is not null
+		</if>
+		<if test="middle_size_rm1 == 2">
+			AND f.middle_size_rm1 is null
+		</if>
+		<if test="sort != null">
+			ORDER BY f.${sort} desc
+		</if>
+	</select>
+
+	<select id="selectFestivalbyId" parameterType="int" resultMap="FestivalListResultMap">
+		SELECT *
+		FROM festival
+		where fe_id = #{fe_id}
+	</select>
+
+	<select id="selectFestivalRecommand" resultMap="FestivalListResultMap">
+		SELECT * FROM
+		(select * from festival
+		order by dbms_random.value)
+		WHERE
+		ROWNUM <![CDATA[<=]]>4
+	</select>
+
+	<select id="selectFestivalAllList" resultMap="FestivalListResultMap">
+		SELECT * FROM FESTIVAL
+	</select>
+	
+	<update id="updateReadcount" parameterType="int">
+		UPDATE festival SET readcount = readcount+1 
+		WHERE fe_id = #{fe_id}	
+	</update>
+	
+</mapper>

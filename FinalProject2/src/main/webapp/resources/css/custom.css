@@ -1,0 +1,352 @@
+.map_wrap {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 350px;
+}
+
+.radius_border {
+    border: 1px solid #919191;
+    border-radius: 5px;
+}
+
+.custom_typecontrol {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    overflow: hidden;
+    width: 132px;
+    height: 30px;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+    font-size: 12px;
+    font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+}
+
+.custom_typecontrol span {
+    display: block;
+    width: 65px;
+    height: 30px;
+    float: left;
+    text-align: center;
+    line-height: 30px;
+    cursor: pointer;
+}
+
+.custom_typecontrol .btn1 {
+    background: #fff;
+    background: linear-gradient(#fff, #e6e6e6);
+}
+
+.custom_typecontrol .btn1:hover {
+    background: #f5f5f5;
+    background: linear-gradient(#f5f5f5, #e3e3e3);
+}
+
+.custom_typecontrol .btn1:active {
+    background: #e6e6e6;
+    background: linear-gradient(#e6e6e6, #fff);
+}
+
+.custom_typecontrol .selected_btn {
+    color: #fff;
+    background: #425470;
+    background: linear-gradient(#425470, #5b6d8a);
+}
+
+.custom_typecontrol .selected_btn:hover {
+    color: #fff;
+}
+
+.custom_zoomcontrol {
+    position: absolute;
+    top: 50px;
+    right: 10px;
+    width: 36px;
+    height: 80px;
+    overflow: hidden;
+    z-index: 1;
+    background-color: #f5f5f5;
+}
+
+.custom_zoomcontrol span {
+    display: block;
+    width: 36px;
+    height: 40px;
+    text-align: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.custom_zoomcontrol span img {
+    padding-top: 8px;
+    width: 20px;
+    height: 20px;
+    /* padding: 3.5px 0; */
+    border: none;
+}
+
+.custom_zoomcontrol span:first-child {
+    border-bottom: 1px solid #bfbfbf;
+}
+
+@font-face {
+    font-family: 'GmarketSansMedium';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'yg-jalnan';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.2/JalnanOTF00.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+/* 인국 */
+
+.container-fluid1 {
+    width: 1740px;
+    margin-left: 80px;
+}
+
+.form-control1 {
+    display: block;
+    width: 260px;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.6;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 0.4rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.label-absolute1 {
+    position: absolute;
+    margin-left: 230px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+}
+
+.btn.btn-selectpicker1 {
+    color: #ced4da;
+    border-color: #ced4da;
+    color: #212529;
+    width: 100px;
+}
+
+:not(.input-group)>.bootstrap-select.form-control2:not([class*="col-"]) {
+    width: 260px;
+}
+
+.text-primary1 {
+    color: #4E66F8 !important;
+    font-size: 400px;
+    font-weight: bold;
+}
+
+.search_bs {
+    width: 25px;
+    height: 25px;
+}
+
+.search_bs2 {
+    width: 25px;
+    height: 25px;
+}
+
+.widthbs {
+    width: 300px;
+}
+
+.mar-left-bs {
+    margin-left: 3rem;
+}
+
+.bscolor {
+    color: rgba(91, 155, 213);
+}
+
+.aroundbs {
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+}
+
+.centerbs {
+    text-align: center;
+}
+
+
+/* 현주 */
+
+.col-jhj {
+    flex: 0 0 auto;
+    width: 85%;
+    text-align: center;
+    padding-left: 60px;
+}
+
+.pd_jhj {
+    padding-top: 2rem;
+}
+
+.pd_jhj2 {
+    padding-top: 2rem;
+    padding-bottom: 1.5rem;
+}
+
+.pt_jhj3 {
+    padding-top: 15rem !important;
+}
+
+.pd_jhj4 {
+    padding-bottom: 0.3rem;
+}
+
+.pd_jhj5 {
+    padding-left: 150px;
+    padding-right: 150px;
+    padding-top: 2rem;
+}
+
+.pd_jhj6 {
+    float: right;
+}
+
+.pd_jhj7 {
+    padding-top: 2rem;
+}
+
+.pd_jhj8 {
+    padding-left: 28%;
+    padding-right: 15%;
+    padding-top: 3rem;
+    flex: 0 0 auto;
+}
+
+.col-lg-jhj {
+    flex: 0 0 auto;
+    width: 25%;
+}
+
+.pd_jhj9 {
+    padding-top: 5.2rem !important;
+    padding-bottom: 5.2rem !important;
+}
+
+.pd_jhj10 {
+    padding-bottom: 10rem;
+}
+
+.pd_jhj11 {
+    padding-bottom: 3rem;
+}
+
+.card-bod-jhj {
+    flex: 1 1 auto;
+    padding: 1rem 1rem;
+}
+
+.col-xl-jhj {
+    flex: 0 0 auto;
+    width: 67%;
+}
+
+
+/* .col-lg-4 {
+    flex: 0 0 auto;
+    width: 33.33333%;
+    height: 5%;
+} */
+
+.nav-jhj {
+    float: right;
+}
+
+.btn-jhj {
+    display: inline-block;
+    font-weight: 400;
+    line-height: 1.4;
+    color: #212529;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    background-color: transparent;
+    border: 1px solid transparent;
+    padding: 0.525rem 0.75rem;
+    font-size: 0.8rem;
+    border-radius: 0.4rem;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.my-jhj {
+    margin-top: 1.5rem !important;
+    margin-bottom: 1.5rem !important;
+    background-color: transparent;
+}
+
+.my-jhj2 {
+    box-sizing: border-box;
+    width: 1000px;
+    height: 250px;
+    /* margin: 20px auto; */
+    background-color: rgb(255, 255, 255);
+    border-radius: 30px 30px 30px 30px / 30px 30px 30px 30px;
+    text-align: center;
+}
+
+.pd_jhj8 {
+    padding-left: 28%;
+    padding-right: 15%;
+    padding-top: 3rem;
+    flex: 0 0 auto;
+}
+
+
+/* 유정 */
+
+.btn-outline-muted-ka {
+    color: black;
+    border-color: yellow;
+    background-color: yellow;
+}
+
+.btn-outline-muted-na {
+    color: white;
+    border-color: rgba(21, 198, 0);
+    background-color: rgba(21, 198, 0);
+}
+
+
+/* 보성 */
+
+.icon-bs {
+    width: 18px;
+    height: 18px;
+}
+
+.icon-bs2 {
+    width: 15px;
+    height: 15px;
+}
+
+.text-primary1 {
+    color: #4E66F8 !important;
+    font-size: 400px;
+    font-weight: bold;
+}

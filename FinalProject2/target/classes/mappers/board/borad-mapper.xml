@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="fp.busan.mvc.board.mapper.BoardMapper">
+
+	<!-- 게시판 맵핑 -->
+	<resultMap type="Board" id="boardListResultMap">
+		<id property="b_code" column="B_CODE" />
+		<result property="user_code" column="User_CODE" />
+		<result property="user_id" column="user_id" />
+		<result property="b_ccode" column="B_Ccode" />
+		<result property="title" column="Title" />
+		<result property="content" column="Content" />
+		<result property="bDate" column="BDATE" />
+		<result property="readCount" column="READCOUNT" />
+		<result property="status" column="STATUS" />
+	</resultMap>
+
+<!-- ★ 강사님 코드보고 따라했는데 뭔지 모르겠음 일단 x
+	<resultMap type="Board" id="boardDetailResultMap"
+		extends="boardListResultMap">
+		<collection property="comments" javaType="arrayList" columnPrefix="C_" resultMap="boardCommentResultMap" />
+	</resultMap>
+-->
+
+	<!-- 게시판 카테고리 맵핑 -->
+	<resultMap type="BoardCategory" id="boardBoardCategoryResultMap">
+		<id property="b_ccode" column="B_Ccode" />
+		<result property="b_cname" column="B_CNAME" />
+	</resultMap>
+
+	<!-- 게시판 댓글 맵핑 -->
+	<resultMap type="Comment" id="boardCommentResultMap">
+		<id property="c_code" column="C_CODE" />
+		<result property="b_code" column="B_CODE" />
+		<result property="user_code" column="User_CODE" />
+		<result property="user_id" column="user_id" />
+		<result property="c_content" column="C_CONTENT" />
+		<result property="c_date" column="C_DATE" />
+	</resultMap>
+	
+	<!-- 게시판 검색기능222 -->
+	<select id="selectBoardList" resultMap="boardListResultMap" parameterType="map">
+		SELECT  B.B_CODE, 
+			    B.B_Ccode, 
+			    B.Title, 
+				M.user_id, 
+				B.Content, 
+				B.BDATE, 
+				B.READCOUNT
+				FROM BOARD B 
+		JOIN Member M ON(B.User_CODE = M.User_CODE)
+		WHERE STATUS = 'Y'
+
+		<if test="writerKeyword != null">
+		AND M.user_id LIKE '%'||#{writerKeyword}||'%'
+		</if>
+		<if test="titleKeyword != null">
+ 		AND B.Title LIKE '%'||#{titleKeyword}||'%'
+ 		</if>
+ 		<if test="contentKeyword != null">
+ 		AND B.Content LIKE '%'||#{contentKeyword}||'%'
+ 		</if>
+ 		<if test="boardCategoryNo != null">
+ 		AND B.B_Ccode = #{boardCategoryNo}
+ 		</if>
+		ORDER BY B.B_CODE DESC
+	</select>
+	
+	<!-- 게시판 검색기능(Count) -->
+	<select id="selectBoardCount" resultType="int" parameterType="map">
+		SELECT COUNT(*)
+		FROM Board B
+		JOIN Member M ON(B.User_CODE = M.User_CODE)
+		WHERE STATUS = 'Y'
+		
+		<if test="writerKeyword != null">
+		AND M.user_id LIKE '%'||#{writerKeyword}||'%'
+		</if>
+		<if test="titleKeyword != null">
+ 		AND B.Title LIKE '%'||#{titleKeyword}||'%'
+ 		</if>
+ 		<if test="contentKeyword != null">
+ 		AND B.Content LIKE '%'||#{contentKeyword}||'%'
+ 		</if>
+ 		<if test="boardCategoryNo != null">
+ 		AND B.B_Ccode = #{boardCategoryNo}
+ 		</if>
+ 		ORDER BY B.B_CODE DESC
+	</select>
+	
+	<!-- 게시판 상세보기 -->
+	<select id="selectBoardByNo" parameterType="int" resultMap="boardListResultMap">
+	SELECT B.B_CODE, 
+		   B.B_Ccode, 
+	       B.Title, 
+	       M.user_id, 
+	       B.Content, 
+	       B.BDATE, 
+	       B.READCOUNT
+	FROM Board B
+	JOIN Member M ON(B.User_CODE = M.User_CODE)
+	WHERE B.STATUS = 'Y' AND B.B_CODE = #{b_code}
+	</select>
+	
+	<!-- 한 게시판에 해당하는 댓글 리스트 조회 -->
+	<select id="selectCommentByNo" parameterType="int" resultMap="boardCommentResultMap">
+	SELECT C.C_CODE, 
+		   C.B_CODE, 
+	 	   C.C_CONTENT, 
+	       M.user_id, 
+	       C.C_DATE
+	FROM B_COMMENT C
+	JOIN Member M ON(C.User_CODE = M.User_CODE)
+	WHERE B_CODE = #{b_code}
+	</select>
+	
+	<!-- 한 게시판에 해당하는 댓글 개수 -->
+	<select id="selectCommentByNoCount" parameterType="int" resultType="int">	
+	SELECT COUNT(*) 
+	FROM B_COMMENT C
+	JOIN Member M ON(C.User_CODE = M.User_CODE)
+	WHERE B_CODE = #{b_code}
+	</select>
+	
+	<!-- 게시판 작성 -->	
+	<insert id="insertBoard" parameterType="Board" useGeneratedKeys="true" keyProperty="b_code" keyColumn="B_CODE">
+		INSERT INTO Board (
+			B_CODE,
+			User_CODE,
+			B_Ccode,
+			Title,
+			Content,
+			BDATE,
+			READCOUNT,
+			STATUS
+		) VALUES (
+			B_CODE.NEXTVAL,
+			${user_code},
+			#{b_ccode},
+			#{title},
+			#{content},
+			SYSDATE,
+			#{readCount},
+			DEFAULT
+		)							
+	</insert>
+	
+	<!-- 댓글 작성 -->
+	<insert id="insertComment" parameterType="Comment">
+	INSERT INTO B_COMMENT (
+		C_CODE,
+		B_CODE,
+		User_CODE,
+		C_CONTENT,
+		C_DATE
+	) VALUES (
+		C_CODE.NEXTVAL, 
+		#{b_code}, 
+		#{user_code}, 
+		#{c_content}, 
+		SYSDATE
+	)		
+	</insert>
+	
+	<!-- 게시판 업데이트 -->
+	<update id="updateBoard" parameterType="Board">
+	UPDATE Board 
+	SET 
+	Title = #{title}, Content = #{content}, B_Ccode = #{b_ccode}
+	WHERE B_CODE = #{b_code}
+	</update>
+	
+	<!-- 댓글 업데이트 -->
+	<update id="updateComment" parameterType="Comment">
+	UPDATE B_COMMENT 
+	SET 
+	C_CONTENT = #{c_content} WHERE C_CODE = #{c_code}
+	</update>
+	
+	<!-- 조회수 업데이트 -->
+	<update id="updateReadCount" parameterType="map">
+	UPDATE Board SET READCOUNT = #{readCount} + 1 WHERE B_CODE = #{b_code}
+	</update>
+	
+	<!-- 게시판 삭제 -->
+	<delete id="deleteBoard" parameterType="int">
+	DELETE FROM Board WHERE B_CODE = #{b_code}
+	</delete>
+	
+	<!-- 댓글 삭제 -->
+	<delete id="deleteComment" parameterType="int">
+	DELETE FROM B_COMMENT WHERE C_CODE = #{c_code}
+	</delete>
+
+</mapper>

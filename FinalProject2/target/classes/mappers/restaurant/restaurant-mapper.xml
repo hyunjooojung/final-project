@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="fp.busan.mvc.restaurant.mapper.RestaurantMapper">
+	<resultMap type="Restaurant" id="restaurantListResultMap">
+		<id property="res_id" column="res_id"/>
+		<result property="res_name" column="RES_NAME"/>
+		<result property="gugunnm" column="gugunnm"/>
+		<result property="lat" column="lng"/>
+		<result property="lng" column="lat"/>
+		<result property="place" column="place"/>
+		<result property="addr" column="addr"/>
+		<result property="tel" column="tel"/>
+		<result property="homepage" column="homepage"/>
+		<result property="time" column="time"/>
+		<result property="img" column="img"/>
+		<result property="img_thumb" column="img_thumb"/>
+		<result property="detail" column="detail"/>
+		<result property="price" column="price"/>
+		<result property="readcount" column="READCOUNT"/>
+		<result property="registration" column="registration"/>
+	</resultMap>
+
+	<select id="selectResAllList" resultMap="restaurantListResultMap" >
+		SELECT * FROM RESTAURANT
+	</select>
+
+
+<select id="selectRestaurantCount" resultType="int" parameterType="map" >
+		SELECT COUNT(*) FROM RESTAURANT
+		where 1=1
+    <if test="detail != null">
+    	AND detail like '%'||#{detail}||'%'
+    </if>
+    <if test="gugunnm != null">
+    	AND gugunnm like '%'||#{gugunnm}||'%'
+    </if>
+    
+	</select>
+
+
+<select id="selectreCommendList" resultMap="restaurantListResultMap" >
+		SELECT * FROM
+		(SELECT * FROM Restaurant
+		order by dbms_random.value)
+		WHERE
+		ROWNUM<![CDATA[<=]]>9
+	</select>
+
+	<select id="restaurantMainSearch" resultMap="restaurantListResultMap" parameterType="map">
+		SELECT * FROM RESTAURANT
+		where 1=1
+    <if test="detail != null">
+    	AND (detail like '%'||#{detail}||'%' or RES_NAME like '%'||#{detail}||'%')
+    </if>
+    <if test="gugunnm != null">
+    	AND gugunnm like '%'||#{gugunnm}||'%'
+    </if>
+    <if test="sort != null">
+			ORDER BY ${sort} desc
+		</if>
+    
+	</select>
+	
+<select id="selectRestaurantSubCount" resultType="int" parameterType="map">
+		SELECT COUNT(*) FROM RESTAURANT
+		where 1=1
+	<if test="detail != null">
+    	AND detail like '%'||#{detail}||'%'
+    </if>
+    <if test="gugunnm != null">
+    	AND gugunnm like '%'||#{gugunnm}||'%'
+    </if>
+    	AND price between #{pricefrom} and #{priceto}
+    <if test="time != null">
+    	AND time like '%'||#{time}||'%'
+    </if>
+    <if test="sort != null">
+			ORDER BY ${sort} desc
+		</if>
+	</select>
+
+
+<select id="selectRestaurantView" resultMap="restaurantListResultMap" parameterType="int">
+		SELECT * FROM RESTAURANT
+		where
+		 res_id = #{res_id}
+    	
+	</select>
+
+<update id="updateReadCount" parameterType="map">
+		UPDATE RESTAURANT SET READCOUNT=#{readcount} WHERE res_id=#{res_id}
+	</update>
+
+
+	<select id="selectRestaurantSubSearch" resultMap="restaurantListResultMap" parameterType="map">
+		SELECT * FROM RESTAURANT
+		where 1=1
+	<if test="detail != null">
+    	AND (detail like '%'||#{detail}||'%' or RES_NAME like '%'||#{detail}||'%')
+    </if>
+    <if test="gugunnm != null">
+    	AND gugunnm like '%'||#{gugunnm}||'%'
+    </if>
+    <if test="pricefrom != null">
+    	AND price between #{pricefrom} and #{priceto}
+    	</if>
+    <if test="time != null">
+    	AND time like '%'||#{time}||'%'
+    </if>
+    <if test="sort != null">
+			ORDER BY ${sort} desc
+		</if>
+	</select>
+	
+	<insert id="insertReservation" parameterType="map">
+	INSERT INTO GPReservation VALUES(SEQ_GP_CODE.NEXTVAL,
+	(SELECT  M.USER_CODE FROM MEMBER M WHERE M.USER_ID = #{memberId} and M.USER_STATUS = 'Y'),
+	(SELECT R.RES_ID FROM RESTAURANT R WHERE R.RES_NAME = #{res_name}),
+	#{pick_date},
+	SYSDATE,
+	#{time},
+	#{adult_num},
+	#{teenager_num},
+	#{kids_num})
+	</insert>
+	
+	
+	<select id="selectRestaurantResname" resultMap="restaurantListResultMap" parameterType="String">
+		SELECT * FROM RESTAURANT
+		where
+		 res_name = #{res_name} 	
+	</select>
+
+</mapper>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
